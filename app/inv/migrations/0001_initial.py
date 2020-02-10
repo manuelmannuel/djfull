@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Categoria',
             fields=[
                 ('clasemodelo_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='bases.ClaseModelo')),
-                ('descripcion', models.CharField(help_text='Descripcion de la Categoria', max_length=100, unique=True)),
+                ('descripcion', models.CharField(help_text='Descripcion de la Categoría', max_length=100, unique=True)),
             ],
             options={
                 'verbose_name_plural': 'Categorias',

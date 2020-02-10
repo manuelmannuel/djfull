@@ -12,7 +12,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
         <div class="dropdown-header">Acciones:</div>
-        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="{% url 'inv:categoria_new' %}"><i class="far fa-calendar-plus"></i>Nueva</a>
         <a class="dropdown-item" href="#">Another action</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">Something else here</a>
@@ -37,13 +37,13 @@
         {% for item in obj %}
           <tr>
             <td>{{ item.id }}</td>
-            <td>{{ item.descipcion }}</td>
-            <td>{{ item.estado }}</td>
+            <td>{{ item.descripcion }}</td>
+            <td>{{ item.estado|yesno:"Activo,Inactivo" }}</td>
             <td>{{ item.fc|date:"d/m/y H:i:s" }}</td>
-            <td>{{ item.fm }}</td>
+            <td>{{ item.fm|date:"d/m/y H:i:s" }}</td>
             <td>
-              <a href="#" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i></a>
-              <a href="#" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i></a>
+              <a href="{% url 'inv:categoria_edit' item.id %}" class="btn btn-warning btn-circle" role="button"><i class="far fa-edit"></i></a>
+              <a href="{% url 'inv:categoria_del' item.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i></a>
             </td>
           </tr>
         {% endfor %}
@@ -55,4 +55,9 @@
 {% endblock %}
 
 {% block js_page %}
+<script>
+  $(document).ready(function() {
+    $('.table').DataTable();
+  });
+</script>
 {% endblock %}
