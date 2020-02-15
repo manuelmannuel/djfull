@@ -49,7 +49,7 @@ class Marca(ClaseModelo):
 
     def save(self):
         self.descripcion = self.descripcion.upper()
-        super(Marca, self)save()
+        super(Marca, self).save()
 
     class Meta:
-        verbose_name_plural = "Marca"                
+        verbose_name_plural = "Marcas"                
