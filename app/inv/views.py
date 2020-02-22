@@ -208,7 +208,7 @@ class ProductoEdit(LoginRequiredMixin, generic.UpdateView):
 		return super().form_valid(form)
 
 def producto_inactivar(request, id):
-	prod = Producto.objects.filter(pk.id).first()
+	prod = Producto.objects.filter(pk=id).first()
 	contexto={}
 	template_name="inv/catalogos_del.html"
 
