@@ -1,5 +1,9 @@
 from django.db import models
 
+#Para los signals
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
 from bases.models import ClaseModelo
 from inv.models import Producto
 
