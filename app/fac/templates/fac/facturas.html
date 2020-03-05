@@ -177,6 +177,98 @@
 {% endblock %}
 {% block js_page %}
 <script>
+    function calcular_detalle(){
+        var cant,prec,desc,stotal,total;
+
+        cant = $("#cantidad").val();
+        cant = cant==="" ? 0 : +cant;
+        cant = cant<0 ? 0 : cant;
+
+        prec =$('#precio').val();
+        prec = prec==="" ? 0 : +prec;
+        prec = prec<0 ? 0 : prec;
+
+        desc = $('#descuento_detalle').val();
+        desc = desc==="" ? 0 : +desc;
+        desc = desc<0 ? 0 : desc;
+
+        desc = desc>(cant * prec) ? 0 : desc;
+
+        stotal = cant * prec;
+        total  = stotal - desc;
+
+        $('#cantidad').val(cant);
+        $('#precio').val(prec);
+        $('#descuento_detalle').val(desc);
+
+        $('#sub_total_detalle').val(stotal);
+        $('#total_detalle').val(total);
+
+        console.log("Cantidad " + cant);
+        console.log("prec " + prec);
+        console.log("desc " + desc);
+
+        console.log("sub_total_detalle " + $('#sub_total_detalle').val());
+        console.log("total_detalle " + $('#total_detalle').val());
+    }
+
+    function buscarProducto(){
+        if ($("#enc_cliente").val()==="0" || $("#enc_cliente").val()===null){
+            mensaje("Cliente No Seleccionado",'red');
+            return false;
+        }
+
+        var codigo = $("#codigo").val();
+        if(codigo===""){
+            return false;
+        }
+
+        var path="{% url 'api:producto_list' %}" + codigo;
+        $.ajax({
+            type:"GET",
+            url: path,
+            success: function(r){
+                console.log(r);
+                console.log(r.existencia);
+                console.log(r.estado);
+
+                if(r.existencia<=0 || !r.estado){
+                    mensaje("Producto No Tiene Existencia o está inactivo",'orange')
+                    $("#codigo").val("");
+                    $("#descripcion").val("");
+                    $("#precio").val("0.00");
+                    $("#codigo").focus();
+                    return false;
+                }
+
+                $("#codigo").val(r.codigo);
+                $("#descripcion").val(r.descripcion);
+                $("#precio").val(r.precio);
+                $("#cantidad").focus();
+
+            },
+            error: function(a,b,c){
+                console.log(a);
+                // console.log(b);
+                // console.log(c);
+                // console.log(a.status)
+                // console.log(a.responseText.detail);
+                // a.responseText["detail"]
+                // mensaje(c,'red');
+                if(a.status==404){
+                    mensaje("Producto -" + codigo + "- No Encontrado o No Existe",'red');
+                    $("#codigo").val("");
+                    $("#descripcion").val("");
+                    $("#precio").val("0.00");
+                    $("#codigo").focus();
+                }
+
+            }
+
+        });
+
+    }
+
     $(function(){
         $("#sidebarToggle").click();
         $("#enc_cliente").select2({
@@ -191,6 +283,25 @@
             }
             abrir_modal("{% url 'fac:factura_producto' %}")
         });
+
+        $("#codigo").keypress(function(e){
+            if(e.keyCode===13){
+                e.preventDefault();
+                buscarProducto();
+            }
+        });
+
+        $('#cantidad,#precio,#descuento_detalle').change(function(){
+            calcular_detalle();
+        });
+
+        $("#enc_id").val("{{ enc.id }}");
+        $("#enc_cliente").val("{{ enc.cliente.id }}").change();
+        $("#fecha").val("{{ enc.fecha|date:'Y-m-d' }}");
+        $("#sub_total").val("{{ enc.sub_total }}");
+        $("#descuento").val("{{ enc.descuento }}");
+        $("#total").val({{ enc.total }});
+        
     });
 </script>
 {% endblock %}

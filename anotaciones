@@ -13,4 +13,4 @@ django-admin startproject app
 
  pip3 install xhtml2pdf
  pip3 install django-userforeignkey
- 
+ pip3 install djangorestframework
