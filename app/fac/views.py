@@ -14,6 +14,7 @@ from bases.views import SinPrivilegios
 
 from .models import Cliente, FacturaEnc, FacturaDet
 from .forms import ClienteForm
+import inv.views as inv
 
 class ClienteView(SinPrivilegios, generic.ListView):
 	permission_required = "fac.view_cliente"
@@ -77,7 +78,14 @@ class FacturaView(SinPrivilegios,generic.ListView):
 @permission_required('fac.change_facturaenc', login_url='bases:sin_privilegios')
 def facturas(request,id=None):
     template_name='fac/facturas.html'
-    contexto = {}
+
+    encabezado={
+    	'fecha':datetime.today()
+    }
+    detalle={}
+    clientes=Cliente.objects.filter(estado=True)
+    contexto = {"enc":encabezado,"det":detalle,"clientes":clientes}
     return render(request,template_name,contexto)
 
-
+class ProductoView(inv.ProductoView):
+	template_name="fac/buscar_producto.html"
