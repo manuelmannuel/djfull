@@ -60,6 +60,9 @@ class FacturaEnc(ClaseModelo2):
     class Meta:
         verbose_name_plural = "Encabezado Facturas"
         verbose_name="Encabezado Factura"
+        permissions = [
+            ('sup_caja_facturaenc','Permisos de Supervisor de Caja Encabezado')
+        ]
     
 
 class FacturaDet(ClaseModelo2):
@@ -82,6 +85,9 @@ class FacturaDet(ClaseModelo2):
     class Meta:
         verbose_name_plural = "Detalles Facturas"
         verbose_name="Detalle Factura"
+        permissions = [
+            ('sup_caja_facturadet','Permisos de Supervisor de Caja Detalle')
+        ]
 
 @receiver(post_save, sender=FacturaDet)
 def detalle_fac_guardar(sender,instance,**kwargs):
